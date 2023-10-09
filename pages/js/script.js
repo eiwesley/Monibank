@@ -47,6 +47,8 @@ const mensagens = {
 }
 
 function verificaCampo(campo) {
+    let mensagem = "";
+    campo.setCustomValidity('');
     if (campo.name == "cpf" && campo.value.length >= 11) {
         ehUmCPF(campo);
     }
@@ -54,5 +56,18 @@ function verificaCampo(campo) {
     if (campo.name == "aniversario" && campo.value != ""){
         ehMaiorIdade(campo);
     }
-    console.log(campo.validity);
+    tiposDeErro.forEach(erro => {
+        if(campo.validity[erro]){
+            mensagem = mensagens[campo.name][erro];
+            console.log(mensagem)
+        }
+    })
+    const mensagemErro = campo.parentNode.querySelector('.mensagem-erro');
+    const validadorDeInput = campo.checkValidity();
+
+    if(!validadorDeInput){
+        mensagemErro.textContent = mensagem;
+    }else{
+        mensagemErro.textContent = "";
+    }
 }
